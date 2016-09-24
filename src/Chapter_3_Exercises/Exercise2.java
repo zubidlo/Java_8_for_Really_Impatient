@@ -24,6 +24,7 @@ public class Exercise2 {
     }
 
     public static void main(String[] args) {
+
         ReentrantLock lock = new ReentrantLock(true);
         withLock(lock, () -> System.out.println(Thread.currentThread().getName()));
     }

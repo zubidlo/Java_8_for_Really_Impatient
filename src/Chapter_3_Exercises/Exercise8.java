@@ -10,22 +10,22 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 /**
- * Here is a concrete example of a ColorTransformer . We want to put a frame around
- * an image, like this:
- * First, implement a variant of the transform method of Section 3.3, “Choosing
- * a Functional Interface,” on page 50, with a ColorTransformer instead of an
- * UnaryOperator<Color> . Then call it with an appropriate lambda expression to put
- * a 10 pixel gray frame replacing the pixels on the border of an image.
+ * Generalize Exercise 5 by writing a static method that yields a ColorTransformer
+ * that adds a frame of arbitrary thickness and color to an image.
  */
 
-@FunctionalInterface
-interface ColorTransformer {
-    Color apply(int x, int y, Color color);
-}
+public class Exercise8 extends Application{
 
-public class Exercise5 extends Application {
+    private static ColorTransformer borderAdder(Image image, int thickness, Color color) {
+        return (x, y, c) ->
+            x <= thickness
+                    || x >= image.getWidth() - thickness
+                    || y <= thickness
+                    || y >= image.getHeight() - thickness ? color : c;
+    }
 
-    public static Image transform(Image image, ColorTransformer transformer) {
+    private static Image transform(Image image, ColorTransformer transformer) {
+
         int width = (int) image.getWidth();
         int height = (int) image.getHeight();
         WritableImage result = new WritableImage(width, height);
@@ -40,19 +40,15 @@ public class Exercise5 extends Application {
     public void start(Stage primaryStage) throws Exception {
         Image image = new Image("Chapter_3_Exercises/trinity-college-dublin.png");
 
-        // grey border
-        ColorTransformer borderTransform = (x, y, color) ->
-                x <= 10
-                        || x >= image.getWidth() - 10
-                        || y <= 10
-                        || y >= image.getHeight() - 10 ? Color.GRAY : color;
+        Image orangeBorder = transform(image, borderAdder(image, 10, Color.ORANGE));
+        Image pinkBorder = transform(image, borderAdder(image, 20, Color.PINK));
 
         primaryStage.setScene(
                 new Scene(
                         new HBox(
                                 new ImageView(image),
-                                new ImageView(transform(image, borderTransform))
-                        )
+                                new ImageView(orangeBorder),
+                                new ImageView(pinkBorder))
                 )
         );
 
