@@ -62,6 +62,7 @@ public class Exercise12 extends Application{
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+
         Image image = new Image("Chapter_3_Exercises/trinity-college-dublin.png");
 
         ColorTransformer addBorder = (x, y, color) ->
